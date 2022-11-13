@@ -1,2 +1,5 @@
 XcodeBuild/*
 */xcuserdata/*
+Derived/*
+*.xcodeproj/*
+*.xcworkspace/*

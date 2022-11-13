@@ -1,15 +1,13 @@
-// Copyright 2022 Yandex LLC. All rights reserved.
-
 import Foundation
 
 @propertyWrapper
-struct Limit<Range: RangeExpression> where Range.Bound: FixedWidthInteger {
-  init(wrappedValue: Range.Bound, _ range: Range) {
+public struct Limit<Range: RangeExpression> where Range.Bound: FixedWidthInteger {
+  public init(wrappedValue: Range.Bound, _ range: Range) {
     self.value = wrappedValue
     self.range = range
   }
   
-  var wrappedValue: Range.Bound {
+  public var wrappedValue: Range.Bound {
     get {
       guard !range.contains(value) else { return value }
 
@@ -30,7 +28,7 @@ struct Limit<Range: RangeExpression> where Range.Bound: FixedWidthInteger {
     }
   }
 
-  var range: Range
+  public var range: Range
 
   private var value: Range.Bound
 }

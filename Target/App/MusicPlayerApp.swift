@@ -1,14 +1,23 @@
 // Copyright 2022 Yandex LLC. All rights reserved.
 
 import SwiftUI
+import Itunes
+import UI
 
 @main
 struct MusicPlayerApp: App {
   var body: some Scene {
     WindowGroup {
       ZStack {
-        SearchList(search: Searcher().search) { song in
-          TrackView(song, formatter: formatter, visibility: visibility)
+        makeItunesSongSearchList { song in
+          TrackView(
+            name: song.name,
+            artistName: song.artistName,
+            duration: song.duration,
+            artworkURL: song.artworkURL,
+            formatter: formatter,
+            visibility: visibility
+          )
         }
         DebugView(visibility: $visibility).background(.clear)
       }
@@ -63,6 +72,11 @@ struct DebugView: View {
             }
           } label: {
             Image(systemName: "ladybug")
+              .rotationEffect(Angle(degrees: isRotating ? 360 : 0))
+              .animation(.linear(duration: 2).repeatForever(autoreverses: false), value: isRotating)
+              .onAppear {
+                isRotating = true
+              }
           }
 
           Button {
@@ -99,6 +113,9 @@ struct DebugView: View {
 
   @State
   private var alignment = Alignment.bottomTrailing
+
+  @State
+  private var isRotating = false
 }
 
 struct DebugView_Previews: PreviewProvider {

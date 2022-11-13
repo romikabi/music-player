@@ -1,31 +1,33 @@
-// Copyright 2022 Yandex LLC. All rights reserved.
-
 import Foundation
 
 @propertyWrapper
-struct Tagged<Tag, Value> {
-  let wrappedValue: Value
+public struct Tagged<Tag, Value> {
+  public var wrappedValue: Value
 
-  var projectedValue: Tagged<Tag, Value> {
+  public init(wrappedValue: Value) {
+    self.wrappedValue = wrappedValue
+  }
+
+  public var projectedValue: Tagged<Tag, Value> {
     self
   }
 }
 
 extension Tagged: Decodable where Value: Decodable {
-  init(from decoder: Decoder) throws {
+  public init(from decoder: Decoder) throws {
     wrappedValue = try decoder.singleValueContainer().decode(Value.self)
   }
 }
 
 extension Tagged: Encodable where Value: Encodable {
-  func encode(to encoder: Encoder) throws {
+  public func encode(to encoder: Encoder) throws {
     var container = encoder.singleValueContainer()
     try container.encode(wrappedValue)
   }
 }
 
 extension Tagged: Comparable where Value: Comparable {
-  static func <(lhs: Self, rhs: Self) -> Bool {
+  public static func <(lhs: Self, rhs: Self) -> Bool {
     lhs.wrappedValue < rhs.wrappedValue
   }
 }

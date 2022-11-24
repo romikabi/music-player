@@ -14,7 +14,7 @@ extension PackageProduct where Self: RawRepresentable, Self.RawValue == String {
 }
 
 extension TargetDependency {
-  public static func package<PD: PackageProduct & RawRepresentable>(
+  public static func external<PD: PackageProduct & RawRepresentable>(
     product: PD
   ) -> TargetDependency where PD.RawValue == String {
     .external(name: product.rawValue)

@@ -56,7 +56,7 @@ let features = [
       .target(name: track.name),
       .target(name: core.name),
       .target(name: ui.name),
-      .package(product: ComposableArchitecture.ComposableArchitecture),
+      .external(product: ComposableArchitecture.ComposableArchitecture),
     ]
   ),
 
@@ -68,7 +68,7 @@ let features = [
     dependencies: [
       .target(name: core.name),
       .target(name: ui.name),
-      .package(product: ComposableArchitecture.ComposableArchitecture),
+      .external(product: ComposableArchitecture.ComposableArchitecture),
     ]
   )
 ]

@@ -5,6 +5,8 @@ let name = "music-player"
 let organization = Organization(name: "com.romikabi")
 let platform = Platform.iOS
 
+// MARK: - Base
+
 let core = Target.make(
   name: "Core",
   platform: platform,
@@ -22,9 +24,9 @@ let ui = Target.make(
   ]
 )
 
-let kit = Target.make(
-  name: "Kit",
-  platform: platform,
+let itunes = Target.make(
+  name: "Itunes",
+  platform: .iOS,
   product: .framework,
   organization: organization,
   dependencies: [
@@ -32,16 +34,46 @@ let kit = Target.make(
   ]
 )
 
-let itunes = Target.make(
-  name: "Itunes",
+let track = Target.make(
+  name: "Track",
   platform: .iOS,
   product: .framework,
   organization: organization,
   dependencies: [
-    .target(name: kit.name),
     .target(name: core.name),
   ]
 )
+
+// MARK: - Features
+
+let features = [
+  Target.make(
+    name: "TrackSearch",
+    platform: .iOS,
+    product: .framework,
+    organization: organization,
+    dependencies: [
+      .target(name: track.name),
+      .target(name: core.name),
+      .target(name: ui.name),
+      .package(product: ComposableArchitecture.ComposableArchitecture),
+    ]
+  ),
+
+  Target.make(
+    name: "DebugOverlay",
+    platform: .iOS,
+    product: .framework,
+    organization: organization,
+    dependencies: [
+      .target(name: core.name),
+      .target(name: ui.name),
+      .package(product: ComposableArchitecture.ComposableArchitecture),
+    ]
+  )
+]
+
+// MARK: - App
 
 let app = Target.make(
   name: "App",
@@ -57,18 +89,24 @@ let app = Target.make(
   dependencies: [
     .target(name: core.name),
     .target(name: ui.name),
-    .target(name: kit.name),
     .target(name: itunes.name),
-  ]
+  ] + features
+    .map(\.name)
+    .map(TargetDependency.target(name:))
 )
+
+// MARK: - Project
 
 let project = Project(
   name: name,
+//  settings: .settings(base: [
+//    "DISABLE_DIAMOND_PROBLEM_DIAGNOSTIC": .string("YES")
+//  ]),
   targets: [
     core,
     ui,
-    kit,
-    app,
+    track,
     itunes,
-  ]
+    app,
+  ] + features
 )

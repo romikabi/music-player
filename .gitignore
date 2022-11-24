@@ -3,3 +3,4 @@ XcodeBuild/*
 Derived/*
 *.xcodeproj/*
 *.xcworkspace/*
+Tuist/Dependencies

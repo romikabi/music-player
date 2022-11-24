@@ -99,9 +99,6 @@ let app = Target.make(
 
 let project = Project(
   name: name,
-//  settings: .settings(base: [
-//    "DISABLE_DIAMOND_PROBLEM_DIAGNOSTIC": .string("YES")
-//  ]),
   targets: [
     core,
     ui,

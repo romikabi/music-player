@@ -6,3 +6,4 @@ public enum Either<T1, T2> {
 }
 
 extension Either: Error where T1: Error, T2: Error {}
+extension Either: Equatable where T1: Equatable, T2: Equatable {}

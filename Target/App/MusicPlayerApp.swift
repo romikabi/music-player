@@ -1,128 +1,84 @@
-// Copyright 2022 Yandex LLC. All rights reserved.
-
 import SwiftUI
 import Itunes
-import UI
+import ComposableArchitecture
+import Track
+import TrackSearch
+import DebugOverlay
+
+struct AppReducer<TrackSearchCollection: RandomAccessCollection & Equatable & ExpressibleByArrayLiteral>: ReducerProtocol where TrackSearchCollection.Element: Track {
+  struct State {
+    var debugOverlay = DebugOverlay.State()
+    var trackSearch = TrackSearch<TrackSearchCollection>.State()
+  }
+
+  enum Action {
+    case trackSearch(TrackSearch<TrackSearchCollection>.Action)
+    case debugOverlay(DebugOverlay.Action)
+  }
+
+  let searchTracks: TrackSearch<TrackSearchCollection>.SearchTracks
+
+  var body: some ReducerProtocol<State, Action> {
+    Scope(state: \.trackSearch, action: /Action.trackSearch) {
+      TrackSearch(searchTracks: searchTracks)
+    }
+    Scope(state: \.debugOverlay, action: /Action.debugOverlay) {
+      DebugOverlay()
+    }
+  }
+}
 
 @main
 struct MusicPlayerApp: App {
+  typealias Reducer = AppReducer<Array<Itunes.Song>>
+
+  let store = Store(
+    initialState: .init(),
+    reducer: Reducer(searchTracks: Itunes.searchTracks)
+  )
+
   var body: some Scene {
     WindowGroup {
       ZStack {
-        makeItunesSongSearchList { song in
-          TrackView(
-            name: song.name,
-            artistName: song.artistName,
-            duration: song.duration,
-            artworkURL: song.artworkURL,
-            formatter: formatter,
-            visibility: visibility
+        TrackSearchView(
+          store: store.scope(
+            state: \.trackSearch,
+            action: Reducer.Action.trackSearch
           )
-        }
-        DebugView(visibility: $visibility).background(.clear)
+        )
+        DebugOverlayView(
+          store: store.scope(
+            state: \.debugOverlay,
+            action: Reducer.Action.debugOverlay
+          )
+        )
+          .background(.clear)
       }
     }
   }
-
-  private let formatter = DateComponentsFormatter()
-
-  @State
-  private var visibility = false
 }
 
-struct DebugView: View {
-  @Binding
-  var visibility: Bool
+extension Itunes.Song: Track {}
 
-  var body: some View {
-    Group {
-      VStack {
-        HStack {
-          Button {
-            if alignment.horizontal == .leading {
-              alignment = .topLeading
-            } else {
-              alignment = .topTrailing
-            }
-          } label: {
-            Image(systemName: "arrow.up")
-          }
-        }
-        HStack {
-          Button {
-            if alignment.vertical == .top {
-              alignment = .topLeading
-            } else {
-              alignment = .bottomLeading
-            }
-          } label: {
-            Image(systemName: "arrow.left")
-          }
-          Menu {
-            Button {
-              visibility.toggle()
-            } label: {
-              HStack {
-                Text("Visibility")
-                Spacer()
-                if visibility {
-                  Image(systemName: "checkmark")
-                }
-              }
-            }
-          } label: {
-            Image(systemName: "ladybug")
-              .rotationEffect(Angle(degrees: isRotating ? 360 : 0))
-              .animation(.linear(duration: 2).repeatForever(autoreverses: false), value: isRotating)
-              .onAppear {
-                isRotating = true
-              }
-          }
-
-          Button {
-            if alignment.vertical == .top {
-              alignment = .topTrailing
-            } else {
-              alignment = .bottomTrailing
-            }
-          } label: {
-            Image(systemName: "arrow.right")
-          }
-        }
-        HStack {
-          Button {
-            if alignment.horizontal == .leading {
-              alignment = .bottomLeading
-            } else {
-              alignment = .bottomTrailing
-            }
-          } label: {
-            Image(systemName: "arrow.down")
-          }
-        }
-      }
+extension Itunes {
+  static var searchTracks: TrackSearch<Array<Itunes.Song>>.SearchTracks {{ query, urlSession, jsonDecoder in
+    switch await search(
+      params: Search.Params(query: query),
+      urlSession: urlSession,
+      jsonDecoder: jsonDecoder
+    ) {
+    case let .success(songs):
+      return .success(songs)
+    case let .failure(.first(urlSessionError)):
+      return .failure(.init(
+        kind: .urlSessionError,
+        errorDescription: urlSessionError.error.localizedDescription
+      ))
+    case let .failure(.second(jsonError)):
+      return .failure(.init(
+        kind: .jsonError(json: jsonError.json),
+        errorDescription: jsonError.error.localizedDescription
+      ))
     }
-    .padding()
-    .background(Color.black.opacity(0.1))
-    .cornerRadius(8)
-    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
-    .padding()
-    .tint(.primary)
-    .animation(.default, value: alignment)
-  }
-
-  @State
-  private var alignment = Alignment.bottomTrailing
-
-  @State
-  private var isRotating = false
-}
-
-struct DebugView_Previews: PreviewProvider {
-  static var previews: some View {
-    DebugView(visibility: $visibility)
-  }
-
-  @State
-  private static var visibility: Bool = false
+  }}
 }

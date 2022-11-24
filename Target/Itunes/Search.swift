@@ -1,14 +1,13 @@
 import Foundation
 import Core
-import Kit
 
 extension Itunes {
   public enum Search {}
 
   public static func search(
     params: Search.Params,
-    urlSession: URLSession = .shared,
-    jsonDecoder: JSONDecoder = .init()
+    urlSession: URLSession,
+    jsonDecoder: JSONDecoder
   ) async -> Result<[Song], Either<URLSessionDataError, JSONDecoderError>> {
     await urlSession
       .result(from: Search.makeURL(params: params))

@@ -1,9 +1,8 @@
 import Foundation
-import Core
 
-public protocol Track: Identifiable {
+public protocol Track: Identifiable, Equatable {
   var name: String { get }
   var artistName: String { get }
-  var duration: Time { get }
+  var duration: Duration { get }
   var artworkURL: URL? { get }
 }

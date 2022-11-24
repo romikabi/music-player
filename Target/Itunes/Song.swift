@@ -1,9 +1,8 @@
 import Foundation
 import Core
-import Kit
 
 extension Itunes {
-  public struct Song: Decodable, Track {
+  public struct Song: Decodable, Equatable {
     @Tagged<Self, UInt64>
     public var id: UInt64
 
@@ -11,12 +10,12 @@ extension Itunes {
 
     public var artistName: String
 
-    @Time.Milliseconds
-    public var duration: Time
+    @Duration.DecodableAsMilliseconds
+    public var duration: Duration
 
     public var artworkURL: URL?
 
-    public init(id: UInt64, name: String, artistName: String, duration: Time, artworkURL: URL? = nil) {
+    public init(id: UInt64, name: String, artistName: String, duration: Duration, artworkURL: URL? = nil) {
       self.id = id
       self.name = name
       self.artistName = artistName

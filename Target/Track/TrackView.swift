@@ -5,17 +5,13 @@ public struct TrackView: View {
   public init(
     name: String,
     artistName: String,
-    duration: Time,
-    artworkURL: URL?,
-    formatter: DateComponentsFormatter,
-    visibility: Bool
+    duration: Duration,
+    artworkURL: URL?
   ) {
     self.name = name
     self.artistName = artistName
     self.duration = duration
     self.artworkURL = artworkURL
-    self.formatter = formatter
-    self.visibility = visibility
   }
 
   public var body: some View {
@@ -31,7 +27,9 @@ public struct TrackView: View {
               image
                 .resizable()
                 .scaledToFit()
-                .cornerRadius(8)
+                .cornerRadius(4)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .aspectRatio(1, contentMode: .fit)
                 .shadow(radius: 4)
             case .empty, .failure:
               note
@@ -43,7 +41,6 @@ public struct TrackView: View {
           note
         }
       }
-      .visibility(visibility)
       .frame(idealHeight: 0)
 
       VStack(alignment: .leading) {
@@ -55,18 +52,13 @@ public struct TrackView: View {
           .font(.subheadline)
           .lineLimit(1)
       }
-      .visibility(visibility)
 
       Spacer()
 
-      if let duration = formatter.string(from: duration.timeInterval) {
-        Text(duration)
-          .font(.footnote)
-          .visibility(visibility)
-      }
+      Text(duration.formatted(.time(pattern: .minuteSecond(padMinuteToLength: 2))))
+        .font(.footnote)
     }
     .fixedSize(horizontal: false, vertical: true)
-    .visibility(visibility)
   }
 
   private var note: some View {
@@ -77,13 +69,11 @@ public struct TrackView: View {
 
   private let name: String
   private let artistName: String
-  private let duration: Time
+  private let duration: Duration
   private let artworkURL: URL?
 
   @State
   private var imageLoaded = false
-  private let formatter: DateComponentsFormatter
-  private let visibility: Bool
 }
 
 
@@ -94,20 +84,22 @@ struct Preview: PreviewProvider {
         name: "Song Song Song Song Song Song Song Song Song",
         artistName: "Artist",
         duration: .minutes(3) + .seconds(35),
-        artworkURL: URL(string: "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/60/f8/a6/60f8a6bc-e875-238d-f2f8-f34a6034e6d2/14UMGIM07615.rgb.jpg/100x100bb.jpg"),
-        formatter: DateComponentsFormatter(),
-        visibility: false
+        artworkURL: URL(string: "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/60/f8/a6/60f8a6bc-e875-238d-f2f8-f34a6034e6d2/14UMGIM07615.rgb.jpg/100x100bb.jpg")
       )
 
       TrackView(
         name: "Song",
         artistName: "Artist",
-        duration: .minutes(3) + .seconds(35),
-        artworkURL: nil,
-        formatter: DateComponentsFormatter(),
-        visibility: false
+        duration: .hours(1) + .minutes(3) + .seconds(35),
+        artworkURL: URL(string: "https://is4-ssl.mzstatic.com/image/thumb/Video128/v4/8c/99/0a/8c990acc-2d0e-33b3-0280-687907808e8d/Warner.185732005.093624444664_USWBV0600456.CROPPED.dj.ghxywlgv.jpg/100x100bb.jpg")
+      )
+
+      TrackView(
+        name: "Song",
+        artistName: "Artist",
+        duration: .seconds(35),
+        artworkURL: nil
       )
     }
-    .previewLayout(.sizeThatFits)
   }
 }

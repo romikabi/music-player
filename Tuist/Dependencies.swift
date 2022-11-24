@@ -1,13 +1,13 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
 
+let descriptors: [any PackageProduct.Type] = [
+  ComposableArchitecture.self
+]
+
 let dependencies = Dependencies(
   swiftPackageManager: .init(
-    [
-      ComposableArchitecture.package,
-    ],
-    productTypes: [
-      ComposableArchitecture.self
-    ].productTypes
+    descriptors.packages,
+    productTypes: descriptors.productTypes
   )
 )

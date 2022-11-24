@@ -28,6 +28,10 @@ extension PackageProduct {
 }
 
 extension Sequence where Element == any PackageProduct.Type {
+  public var packages: [Package] {
+    map { $0.package }
+  }
+
   public var productTypes: [String: Product] {
     reduce(into: [:]) { partialResult, element in
       partialResult.merge(element.productTypes, uniquingKeysWith: { f, s in s })

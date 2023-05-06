@@ -4,3 +4,4 @@ Derived/*
 *.xcodeproj/*
 *.xcworkspace/*
 Tuist/Dependencies
+.DS_Store

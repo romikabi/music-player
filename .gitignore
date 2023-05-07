@@ -1,7 +1,3 @@
 XcodeBuild/*
-*/xcuserdata/*
-Derived/*
-*.xcodeproj/*
-*.xcworkspace/*
-Tuist/Dependencies
+**/xcuserdata/*
 .DS_Store

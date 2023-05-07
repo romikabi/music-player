@@ -29,7 +29,9 @@ struct AppReducer<TrackSearchCollection: RandomAccessCollection & Equatable & Ex
 }
 
 @main
-struct MusicPlayerApp: App {
+public struct MusicPlayerApp: App {
+  public init() {}
+
   typealias Reducer = AppReducer<Array<Itunes.Song>>
 
   let store = Store(
@@ -37,7 +39,7 @@ struct MusicPlayerApp: App {
     reducer: Reducer(searchTracks: Itunes.searchTracks)
   )
 
-  var body: some Scene {
+  public var body: some Scene {
     WindowGroup {
       ZStack {
         TrackSearchView(

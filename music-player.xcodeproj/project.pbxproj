@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		44901BB42A06F34B00FA5CA6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 44901BB32A06F34B00FA5CA6 /* Assets.xcassets */; };
 		44901BB82A06F34B00FA5CA6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 44901BB72A06F34B00FA5CA6 /* Preview Assets.xcassets */; };
-		44E473542A06F4ED007E8F9F /* App in Frameworks */ = {isa = PBXBuildFile; productRef = 44E473532A06F4ED007E8F9F /* App */; };
+		44C682172B18E3C300CFDFA0 /* App in Frameworks */ = {isa = PBXBuildFile; productRef = 44C682162B18E3C300CFDFA0 /* App */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -17,7 +17,6 @@
 		44901BB32A06F34B00FA5CA6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		44901BB52A06F34B00FA5CA6 /* music_player.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = music_player.entitlements; sourceTree = "<group>"; };
 		44901BB72A06F34B00FA5CA6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		44E473512A06F413007E8F9F /* App */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = App; path = Target/App; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -25,7 +24,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44E473542A06F4ED007E8F9F /* App in Frameworks */,
+				44C682172B18E3C300CFDFA0 /* App in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,7 +70,6 @@
 		44E473502A06F413007E8F9F /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				44E473512A06F413007E8F9F /* App */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -100,7 +98,7 @@
 			);
 			name = "music-player";
 			packageProductDependencies = (
-				44E473532A06F4ED007E8F9F /* App */,
+				44C682162B18E3C300CFDFA0 /* App */,
 			);
 			productName = "music-player";
 			productReference = 44901BAC2A06F34A00FA5CA6 /* music-player.app */;
@@ -367,7 +365,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		44E473532A06F4ED007E8F9F /* App */ = {
+		44C682162B18E3C300CFDFA0 /* App */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = App;
 		};
